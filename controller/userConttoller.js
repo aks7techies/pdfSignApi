@@ -1,4 +1,4 @@
-const User = require("../modale/schema");
+const User = require("../model/userdetail");
 
 const handleGetAllUser = async(req, res)=>{
     const allDbusers = await User.find({});
