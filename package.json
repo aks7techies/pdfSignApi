@@ -1,0 +1,17 @@
+{
+  "name": "pdfsignapi",
+  "version": "1.0.0",
+  "description": "psf sign api  and node js ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "akshay",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "mongoose": "^8.2.0",
+    "nodemon": "^3.1.0"
+  }
+}
