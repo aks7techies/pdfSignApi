@@ -1,11 +1,14 @@
 const express = require('express');
 const { connectDB } = require('./db_connection/config');
 const { logReqRes } = require('./middleware');
-
+const cors = require('cors');
 const staticRouter = require('./routers/users');
 const userRouter = require('./routers/loginSign');
 require('dotenv').config();
 const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(logReqRes('log.txt'));
@@ -23,7 +26,7 @@ connectDB(process.env.DB)
 // Routers
 app.use('/api/users', staticRouter); // Assuming this is for static content like images, etc.
 app.use('/api/user', userRouter); // Corrected path for login routes
-app.use('/api/user', userRouter); // Corrected path for signup routes
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
