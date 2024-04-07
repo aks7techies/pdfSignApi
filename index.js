@@ -4,6 +4,9 @@ const { logReqRes } = require('./middleware');
 const cors = require('cors');
 const staticRouter = require('./routers/users');
 const userRouter = require('./routers/loginSign');
+const clientMaster = require('./routers/clientMaster');
+const templateMaster = require('./routers/templateMaster');
+
 require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
@@ -26,6 +29,8 @@ connectDB(process.env.DB)
 // Routers
 app.use('/api/users', staticRouter); // Assuming this is for static content like images, etc.
 app.use('/api/user', userRouter); // Corrected path for login routes
+app.use('/api/client',clientMaster);
+app.use('/api/template',templateMaster);
 
 
 const PORT = process.env.PORT || 3000;
