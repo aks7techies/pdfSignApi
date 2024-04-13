@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-function validateFileExtension(value) {
-  const validExtensions = ["pdf"]; // Add more extensions as needed
-  const fileExtension = value.substring(value.lastIndexOf(".")).toLowerCase();
-  return validExtensions.includes(fileExtension);
-}
+// function validateFileExtension(value) {
+//   const validExtensions = ["pdf"]; // Add more extensions as needed
+//   const fileExtension = value.substring(value.lastIndexOf(".")).toLowerCase();
+//   return validExtensions.includes(fileExtension);
+// }
 const userDetailSchema = new mongoose.Schema(
   {
     clientId: {
@@ -16,12 +16,7 @@ const userDetailSchema = new mongoose.Schema(
     },
     originalFileName: {
       type: String,
-      required: true,
-      validate: {
-        validator: validateFileExtension,
-        message: (props) =>
-          `${props.value} is not a valid file extension. Only .doc and .docx files are allowed.`,
-      },
+      required: true
     },
     stage: {
       type: Number,

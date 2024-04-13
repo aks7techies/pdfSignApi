@@ -66,20 +66,19 @@ const handleTemplatePost = async(req, res)=>{
           }
     
           const body = req.body;
+          // console.error(body);
+
           const token = await getToken(body.token);
-    
           if (!token.status) {
             // Return unauthorized status if token is invalid
             return res.status(401).json({msg: "Unauthorized"});
           }
-    
           // Check if all required fields are present
           if (!body || !body.documentName) {
             return res.status(400).json({msg: "All fields are required..."});
           }
     
           const filename = req.file ? req.file.filename : null;
-    
           // Create user record
           const result = await TemplateModal.create({
             documentName: body.documentName,

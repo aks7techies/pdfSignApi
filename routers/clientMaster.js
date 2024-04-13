@@ -3,4 +3,6 @@ const {handleGetAllClient,handlePostAddClient} = require('../controller/clientMa
 const router = express.Router();
 router.route('/').get(handleGetAllClient).post(handlePostAddClient);
 
+
+
 module.exports = router;

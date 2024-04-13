@@ -1,70 +1,96 @@
-const UserInsertModal = require('../model/draftDataProcessModal'); // Adjust the path as needed
+const UserInsertModal = require("../model/draftDataProcessModal"); // Adjust the path as needed
 const {getToken} = require("../middleware/auth");
 const multer = require("multer");
+const path = require("path");
 
-const handleGetAllUser = async (req, res) => { 
+const handleGetAllUser = async (req, res) => {
   try {
-     const token_ = getToken(req.params.token);
-    if(!token_.status){
-      return res.status(401).json({ msg: "Unauthorized" });
-    }else{
+    const token_ = getToken(req.query.token);
 
-      const allDbusers = await UserInsertModal.find({});
-      if(allDbusers && allDbusers.length >0){
-        return res.status(200).json({ status: true, msg: "Data found successfully.", data: allDbusers });
-      }else {
-           return res.status(404).json({ status: false, msg: "Data not found." });
-         }
+    if (!token_.status) {
+      return res.status(401).json({msg: "Unauthorized"});
+    } else {
+      //  console.log(req.query.clientId);
+      const allDbusers = await UserInsertModal.find({
+        clientId: req.query.clientId,
+        stage: 0,
+      });
+      if (allDbusers && allDbusers.length > 0) {
+        return res.status(200).json({
+          status: true,
+          msg: "Data found successfully.",
+          data: allDbusers,
+        });
+      } else {
+        return res
+          .status(200)
+          .json({status: true, msg: "Data not found.", data: []});
+      }
     }
   } catch (error) {
-      console.log("Error:", error);
-      return res.status(500).json({ status: false, msg: "Internal Server Error" });
+    console.log("Error:", error);
+    return res.status(500).json({status: false, msg: "Internal Server Error"});
   }
-
-  
 };
-const handleGetUserById = async (req, res) => {
 
+
+const handleGetUserById = async (req, res) => {
   try {
     const token_ = getToken(req.body.token);
-   if(!token_.status){
-     return res.status(401).json({ msg: "Unauthorized" });
-   }else{
-
-    const user = await UserInsertModal.findById(req.params.id);
-     if(user && user.length >  0){
-       return res.status(200).json({ status: true, msg: "Data found successfully.", data: user });
-     }else {
-          return res.status(404).json({ status: false, msg: "Data not found." });
+    if (!token_.status) {
+      return res.status(401).json({msg: "Unauthorized"});
+    } else {
+      const user = await UserInsertModal.findById(req.params.id);
+      if (user && user.length > 0) {
+        return res
+          .status(200)
+          .json({status: true, msg: "Data found successfully.", data: user});
+      } else {
+        return res
+          .status(200)
+          .json({status: true, msg: "Data not found.", data: []});
       }
-   }
- } catch (error) {
-     console.log("Error:", error);
-     return res.status(500).json({ status: false, msg: "Internal Server Error" });
- }
+    }
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({status: false, msg: "Internal Server Error"});
+  }
 };
 const handleUpdateUserById = async (req, res) => {
   try {
     const token_ = getToken(req.body.token);
-   if(!token_.status){
-     return res.status(401).json({ msg: "Unauthorized" });
-   }else{
-
-    const user = await UserInsertModal.findByIdAndUpdate(req.body._id,req.body.clientId, {stage: req.body.stage});
-     if(user){
-       return res.status(200).json({ status: true, msg: "Data Update successfully.", data: user });
-     }else {
-          return res.status(404).json({ status: false, msg: "Data not Update." });
+    if (!token_.status) {
+      return res.status(401).json({msg: "Unauthorized"});
+    } else {
+      const user = await UserInsertModal.findByIdAndUpdate(req.body.id, {
+        stage: req.body.stage,
+      });
+      if (user) {
+        return res
+          .status(200)
+          .json({status: true, msg: "Data Update successfully.", data: user});
+      } else {
+        return res.status(400).json({status: false, msg: "Data not Update."});
       }
-   }
- } catch (error) {
-     console.log("Error:", error);
-     return res.status(500).json({ status: false, msg: "Internal Server Error" });
- }
+    }
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({status: false, msg: "Internal Server Error"});
+  }
 };
 const handleDeleteUserById = async (req, res) => {
-  await UserInsertModal.findByIdAndDelete(req.params.id);
-  return res.json({status: "Success"});
+  try {
+    const token = await getToken(req.query.token);
+    if (!token.status) {
+      return res.status(401).json({msg: "Unauthorized"});
+    } else {
+      await UserInsertModal.findByIdAndDelete(req.query.id);
+      return res.status(200).json({status: "Delete Success"});
+    }
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({status: false, msg: "Internal Server Error"});
+  }
 };
 // Multer configuration
 const storage = multer.diskStorage({
@@ -77,17 +103,19 @@ const storage = multer.diskStorage({
 });
 const fileFilter = function (req, file, cb) {
   // Allow only .doc and .docx file extensions
-  const allowedExtensions = ['.pdf'];
+  const allowedExtensions = [".pdf"];
   const extname = path.extname(file.originalname).toLowerCase();
   if (allowedExtensions.includes(extname)) {
-      // If extension is allowed, accept the file
-      cb(null, true);
+    // If extension is allowed, accept the file
+    cb(null, true);
   } else {
-      // If extension is not allowed, reject the file
-      cb(new Error('Only .pdf file are allowed'));
+    // If extension is not allowed, reject the file
+    cb(new Error("Only .pdf file are allowed"));
   }
 };
-const upload = multer({storage: storage,fileFilter: fileFilter}).single("originalFileName");
+const upload = multer({storage: storage, fileFilter: fileFilter}).single(
+  "originalFileName"
+);
 const handleCreateUserById = async (req, res) => {
   // Use try-catch block to handle asynchronous errors
   try {
@@ -101,17 +129,17 @@ const handleCreateUserById = async (req, res) => {
         console.error("Unknown Error:", err);
         return res.status(500).json({msg: "File upload failed"});
       }
-
       const body = req.body;
       const token = await getToken(body.token);
-
       if (!token.status) {
-        // Return unauthorized status if token is invalid
         return res.status(401).json({msg: "Unauthorized"});
       }
-
-      // Check if all required fields are present
-      if (!body || !body.name || !body.email || !body.documentName) {
+      if (
+        !body ||
+        !body.clientId ||
+        !body.draftDocumentName ||
+        !body.dateTimeOriginal
+      ) {
         return res.status(400).json({msg: "All fields are required..."});
       }
 
@@ -122,12 +150,10 @@ const handleCreateUserById = async (req, res) => {
         clientId: body.clientId,
         draftDocumentName: body.draftDocumentName,
         originalFileName: filename,
-        stage:body.stage,
-        coordinate:body.coordinate,
-        dateTimeOriginal:body.dateTimeOriginal,
+        dateTimeOriginal: body.dateTimeOriginal,
       });
-
-      return res.status(201).json({msg: "Success", data: result});
+      const insertedId = result._id; // Get the inserted ID
+      return res.status(201).json({msg: "Success", data: result, insertedId: insertedId});
     });
   } catch (error) {
     // Handle internal server errors
@@ -136,10 +162,13 @@ const handleCreateUserById = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = {
   handleGetAllUser,
   handleGetUserById,
   handleUpdateUserById,
   handleDeleteUserById,
-  handleCreateUserById,
+  handleCreateUserById
 };

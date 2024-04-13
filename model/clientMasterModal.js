@@ -8,7 +8,6 @@ const clientMasterSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
         trim: true,
         lowercase: true,
         validate: {
@@ -19,15 +18,28 @@ const clientMasterSchema = new mongoose.Schema({
             message: props => `${props.value} is not a valid email address!`
         }
     },
-    isActive:{
-        type:Number,
-        default:0
+    mobileNo:{
+        type:String,
+        required:true,
+        validate:{
+            validator: function(value){
+                return /^[6-9][0-9]{9}$/.test(value);
+            },
+            message: props => `${props.value} is not a valid mobile Number!`
+        }
     },
-    isDelete:{
-        type:Boolean,
+    isActive: {
+        type: Number,
+        default: 0
+    },
+    isDelete: {
+        type: Boolean,
         default: false
     }
 }, { timestamps: true });
+
+// Remove unique constraint from email field
+// Remove the 'unique: true' property from the email field definition
 
 const ClientModal = mongoose.model('ClientModal', clientMasterSchema);
 

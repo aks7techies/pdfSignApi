@@ -4,7 +4,7 @@ function validateFileExtension(value) {
     const fileExtension = value.substring(value.lastIndexOf('.')).toLowerCase();
     return validExtensions.includes(fileExtension);
 }
-const historyDataSchema = new mongoose.Schema({
+const VerificationSchema = new mongoose.Schema({
     
     clientId:{
         type:String,
@@ -15,6 +15,11 @@ const historyDataSchema = new mongoose.Schema({
         required:true
     },
     photoFile:{
+        type:String,
+        required:true
+        
+    },
+    Signature:{
         type:String,
         required:true
         
@@ -39,5 +44,5 @@ const historyDataSchema = new mongoose.Schema({
 
 },{timestamps:true});
 
-const HistoryModal = mongoose.model('HistoryModal',historyDataSchema);
-module.exports = HistoryModal;
+const VerificationModal = mongoose.model('VerificationModal',VerificationSchema);
+module.exports = VerificationModal;

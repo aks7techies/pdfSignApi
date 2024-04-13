@@ -10,6 +10,7 @@ const historyDataSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+   
     Activity:{
         type:String,
         required:true
