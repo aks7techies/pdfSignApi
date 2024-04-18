@@ -10,6 +10,7 @@ const verificationDetails = require('./routers/verificationroute');
 const unProcess = require('./routers/unProcessRoute');
 const historyDetais = require('./routers/historyRoute');
 const processDetails = require('./routers/processRoute');
+const createImages = require('./routers/createImageRoute');
 require('dotenv').config();
 const app = express();
 const bodyParser = require('body-parser');
@@ -38,6 +39,7 @@ app.use('/api/verification',verificationDetails);
 app.use('/api/history',historyDetais);
 app.use('/api/unComplete',unProcess);
 app.use('/api/Complete',processDetails);
+app.use('/api/CreateImages',createImages);
 
 
 const PORT = process.env.PORT || 3000;

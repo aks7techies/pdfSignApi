@@ -16,7 +16,7 @@ const handleGetAllClient = async (req, res) => {
       if (allClients && allClients.length > 0) {
         return res.status(200).json({ status: true, msg: "Data found successfully.", data: allClients });
       } else {
-        return res.status(404).json({ status: false, msg: "Data not found." });
+        return res.status(200).json({ status: false, msg: "Data not found." ,data:[]});
       }
     } catch (error) {
       console.log("Error:", error);
