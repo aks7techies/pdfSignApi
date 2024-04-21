@@ -14,6 +14,7 @@ const handleGetAllUser = async (req, res) => {
       const allDbusers = await UserInsertModal.find({
         clientId: req.query.clientId,
         stage: 0,
+        isDelete:0
       });
       if (allDbusers && allDbusers.length > 0) {
         return res.status(200).json({
@@ -36,12 +37,14 @@ const handleGetAllUser = async (req, res) => {
 
 const handleGetUserById = async (req, res) => {
   try {
-    const token_ = getToken(req.body.token);
+    const token_ = getToken(req.query.token);
+
     if (!token_.status) {
       return res.status(401).json({msg: "Unauthorized"});
     } else {
-      const user = await UserInsertModal.findById(req.params.id);
-      if (user && user.length > 0) {
+ 
+      const user = await UserInsertModal.findById(req.query.id);
+      if (user) {
         return res
           .status(200)
           .json({status: true, msg: "Data found successfully.", data: user});
@@ -70,7 +73,7 @@ const handleUpdateUserById = async (req, res) => {
           .status(200)
           .json({status: true, msg: "Data Update successfully.", data: user});
       } else {
-        return res.status(400).json({status: false, msg: "Data not Update."});
+        return res.status(200).json({status: false, msg: "Data not Update.",data:[]});
       }
     }
   } catch (error) {
@@ -86,6 +89,22 @@ const handleDeleteUserById = async (req, res) => {
     } else {
       await UserInsertModal.findByIdAndDelete(req.query.id);
       return res.status(200).json({status: "Delete Success"});
+    }
+  } catch (error) {
+    console.log("Error:", error);
+    return res.status(500).json({status: false, msg: "Internal Server Error"});
+  }
+};
+const handleSoftDeleteUserById = async (req, res) => {
+  try {
+    const token = await getToken(req.query.token);
+    if (!token.status) {
+      return res.status(401).json({msg: "Unauthorized"});
+    } else {
+      await UserInsertModal.findByIdAndUpdate(req.query.id,{
+        isDelete: 1,
+      });
+      return res.status(200).json({status: true,msg: "Delete Success"});
     }
   } catch (error) {
     console.log("Error:", error);
@@ -150,9 +169,11 @@ const handleCreateUserById = async (req, res) => {
         clientId: body.clientId,
         draftDocumentName: body.draftDocumentName,
         originalFileName: filename,
+        coordinate:body.coordinate,
         dateTimeOriginal: body.dateTimeOriginal,
       });
       const insertedId = result._id; // Get the inserted ID
+        
       return res.status(201).json({msg: "Success", data: result, insertedId: insertedId});
     });
   } catch (error) {
@@ -170,5 +191,6 @@ module.exports = {
   handleGetUserById,
   handleUpdateUserById,
   handleDeleteUserById,
-  handleCreateUserById
+  handleCreateUserById,
+  handleSoftDeleteUserById
 };

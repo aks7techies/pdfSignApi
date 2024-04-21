@@ -24,7 +24,7 @@ const userDetailSchema = new mongoose.Schema(
       default: 0,
     },
     coordinate: {
-      type: Object,
+      type: Array,
     },
     dateTimeOriginal: {
       type:String,

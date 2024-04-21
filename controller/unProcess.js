@@ -30,10 +30,13 @@ const handleGetAllUnProcess = async (req, res) => {
   };
 const handleUpdateUnProcess = async (req, res) => {
     try {
+
       const token = getToken(req.body.token);
+      // console.log(req.body.token)
       if (!token.status) {
         return res.status(401).json({msg: "Unauthorized"});
       } else {
+       
         const updateData = await UserInsertModal.findByIdAndUpdate(req.body.id, {
           stage: req.body.stage,
         });
@@ -46,7 +49,7 @@ const handleUpdateUnProcess = async (req, res) => {
         } else {
           return res
             .status(400)
-            .json({status: false, msg: "Data not found or not updated."});
+            .json({status: false, msg: "Data not found or not updated.",data:[]});
         }
       }
     } catch (error) {
