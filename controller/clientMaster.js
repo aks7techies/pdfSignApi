@@ -1,16 +1,10 @@
 const ClientModal = require('../model/clientMasterModal'); // Adjust the path as needed
 const {getToken} = require("../middleware/auth");
-<<<<<<< HEAD
 const { default: mongoose } = require('mongoose');
 
 const handleGetAllClient = async (req, res) => {
     const token_ = req.query.token;
     const insertedUser = req.query.insertedUser; // Assuming this is passed in the query
-=======
-
-const handleGetAllClient = async (req, res) => {
-    const token_ = req.query.token;
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
     
     try {
       const token = await getToken(token_);
@@ -20,11 +14,7 @@ const handleGetAllClient = async (req, res) => {
         return res.status(401).json({ msg: "Unauthorized" });
       }
   
-<<<<<<< HEAD
       const allClients = await ClientModal.find({insertedBy: new mongoose.Types.ObjectId(insertedUser)});
-=======
-      const allClients = await ClientModal.find({});
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       if (allClients && allClients.length > 0) {
         return res.status(200).json({ status: true, msg: "Data found successfully.", data: allClients });
       } else {
@@ -38,11 +28,7 @@ const handleGetAllClient = async (req, res) => {
   
 
 const handlePostAddClient = async (req, resp) => {
-<<<<<<< HEAD
   const { name, email, mobileNo,token,insertedUser } = req.body;
-=======
-  const { name, email, mobileNo,token } = req.body;
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
   try {
       const token_ = await getToken(token);
 
@@ -54,12 +40,8 @@ const handlePostAddClient = async (req, resp) => {
               const result = await ClientModal.create({
                   name: name,
                   email: email,
-<<<<<<< HEAD
                   mobileNo: mobileNo,
                   insertedBy: insertedUser, // Assuming token_.userId contains the ID of the user who is inserting
-=======
-                  mobileNo: mobileNo
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
               });
               return resp.status(201).json({ msg: "Success", data: result });
           } else {

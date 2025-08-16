@@ -3,7 +3,6 @@ const {getToken} = require("../middleware/auth");
 const multer = require("multer");
 const path = require('path');
 
-<<<<<<< HEAD
 const handleTemplateGet = async(req, res)=>{  
     try {
         const token = await getToken(req.query.token);
@@ -11,27 +10,11 @@ const handleTemplateGet = async(req, res)=>{
             return res.status(401).json({ msg: "Unauthorized" });
         }else{
            const data = await TemplateModal.find({adminUserId:req.query.adminUserId});
-=======
-const handleTemplateGet = async(req, res)=>{
-
-    const token_ = req.query.token;
-    try {
-        
-        const token = await getToken(token_);
-        if(!token.status){
-            return res.status(401).json({ msg: "Unauthorized" });
-        }else{
-           const data = await TemplateModal.find({});
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
            if (data && data.length > 0) {
             return res.status(200).json({ status: true, msg: "Data found successfully.", data: data });
         } else {
             return res.status(404).json({ status: false, msg: "Data not found." });
         }
-<<<<<<< HEAD
-=======
-
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
         }
     } catch (error) {
          console.log("Error:", error);
@@ -94,10 +77,7 @@ const handleTemplatePost = async(req, res)=>{
           const filename = req.file ? req.file.filename : null;
           // Create user record
           const result = await TemplateModal.create({
-<<<<<<< HEAD
             adminUserId:body.adminUserId,
-=======
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
             documentName: body.documentName,
             document: filename,
           });
@@ -123,11 +103,7 @@ const handleTemplatePost = async(req, res)=>{
         if(!token.status){
             return res.status(401).json({ msg: "Unauthorized" });
         }else{
-<<<<<<< HEAD
            const data = await TemplateModal.find({_id:id,adminUserId:req.query.adminUserId});
-=======
-           const data = await TemplateModal.find({_id:id});
->>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
            if (data && data.length > 0) {
             return res.status(200).json({ status: true, msg: "Data found successfully.", data: data });
         } else {
