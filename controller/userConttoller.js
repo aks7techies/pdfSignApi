@@ -2,7 +2,10 @@ const UserInsertModal = require("../model/draftDataProcessModal"); // Adjust the
 const {getToken} = require("../middleware/auth");
 const multer = require("multer");
 const path = require("path");
+<<<<<<< HEAD
 const {uploadFileToS3} = require('./uploadS3File');
+=======
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
 
 const handleGetAllUser = async (req, res) => {
   try {
@@ -15,7 +18,11 @@ const handleGetAllUser = async (req, res) => {
       const allDbusers = await UserInsertModal.find({
         clientId: req.query.clientId,
         stage: 0,
+<<<<<<< HEAD
         isDelete: 0,
+=======
+        isDelete:0
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       });
       if (allDbusers && allDbusers.length > 0) {
         return res.status(200).json({
@@ -34,6 +41,11 @@ const handleGetAllUser = async (req, res) => {
     return res.status(500).json({status: false, msg: "Internal Server Error"});
   }
 };
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
 const handleGetUserById = async (req, res) => {
   try {
     const token_ = getToken(req.query.token);
@@ -41,6 +53,10 @@ const handleGetUserById = async (req, res) => {
     if (!token_.status) {
       return res.status(401).json({msg: "Unauthorized"});
     } else {
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       const user = await UserInsertModal.findById(req.query.id);
       if (user) {
         return res
@@ -71,9 +87,13 @@ const handleUpdateUserById = async (req, res) => {
           .status(200)
           .json({status: true, msg: "Data Update successfully.", data: user});
       } else {
+<<<<<<< HEAD
         return res
           .status(200)
           .json({status: false, msg: "Data not Update.", data: []});
+=======
+        return res.status(200).json({status: false, msg: "Data not Update.",data:[]});
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       }
     }
   } catch (error) {
@@ -88,7 +108,11 @@ const handleDeleteUserById = async (req, res) => {
       return res.status(401).json({msg: "Unauthorized"});
     } else {
       await UserInsertModal.findByIdAndDelete(req.query.id);
+<<<<<<< HEAD
       return res.status(200).json({status: true,status: "Delete Success"});
+=======
+      return res.status(200).json({status: "Delete Success"});
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
     }
   } catch (error) {
     console.log("Error:", error);
@@ -101,10 +125,17 @@ const handleSoftDeleteUserById = async (req, res) => {
     if (!token.status) {
       return res.status(401).json({msg: "Unauthorized"});
     } else {
+<<<<<<< HEAD
       await UserInsertModal.findByIdAndUpdate(req.query.id, {
         isDelete: 1,
       });
       return res.status(200).json({status: true,status: true, msg: "Delete Success"});
+=======
+      await UserInsertModal.findByIdAndUpdate(req.query.id,{
+        isDelete: 1,
+      });
+      return res.status(200).json({status: true,msg: "Delete Success"});
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
     }
   } catch (error) {
     console.log("Error:", error);
@@ -157,19 +188,28 @@ const handleCreateUserById = async (req, res) => {
         !body ||
         !body.clientId ||
         !body.draftDocumentName ||
+<<<<<<< HEAD
         !body.dateTimeOriginal ||
         !body.token
+=======
+        !body.dateTimeOriginal
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       ) {
         return res.status(400).json({msg: "All fields are required..."});
       }
 
       const filename = req.file ? req.file.filename : null;
+<<<<<<< HEAD
       const urlname = await uploadFileToS3(`./uploads/orginalDocument/${filename}`);
         if(urlname){
+=======
+
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
       // Create user record
       const result = await UserInsertModal.create({
         clientId: body.clientId,
         draftDocumentName: body.draftDocumentName,
+<<<<<<< HEAD
         originalFileName: urlname,
         coordinate: body.coordinate,
         dateTimeOriginal: body.dateTimeOriginal,
@@ -181,6 +221,15 @@ const handleCreateUserById = async (req, res) => {
         .status(201)
         .json({status: true,msg: "Success", data: result, insertedId: insertedId});
      }
+=======
+        originalFileName: filename,
+        coordinate:body.coordinate,
+        dateTimeOriginal: body.dateTimeOriginal,
+      });
+      const insertedId = result._id; // Get the inserted ID
+        
+      return res.status(201).json({msg: "Success", data: result, insertedId: insertedId});
+>>>>>>> 853b2a6f459e59f934a9f9253831f69e97df1ab7
     });
   } catch (error) {
     // Handle internal server errors
